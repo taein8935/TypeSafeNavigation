@@ -16,22 +16,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.tikim.typesafenavigation.ui.theme.TypeSafeNavigationTheme
-import kotlinx.serialization.Serializable
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
         setContent {
             TypeSafeNavigationTheme {
-
                 val navController = rememberNavController()
+
                 NavHost(
                     navController = navController,
                     startDestination = Route.Home
@@ -42,20 +42,24 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(
                                     Route.Detail(
                                         id = "0",
-                                        name = "Lemonade",
-                                        description = "Refreshing lemon-flavored soda"
+                                        name = "사과",
+                                        description = "비타민, 식이 섬유 등 다양한 영양소가 있습니다."
                                     )
                                 )
                             }
                         )
                     }
-
                     composable<Route.Detail> {
                         val args = it.toRoute<Route.Detail>()
+
+                        val id = args.id
+                        val name = args.name
+                        val description = args.description
+
                         DetailScreen(
-                            id = args.id,
-                            name = args.name,
-                            description = args.description,
+                            id = id,
+                            name = name,
+                            description = description,
                             onClick = {
                                 navController.navigateUp()
                             }
@@ -116,45 +120,21 @@ fun DetailScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = id
+                text = "id : $id"
+            )
+            Text(
+                text = "name : $name"
             )
             Text(
                 text = description
-            )
-            Text(
-                text = name
             )
             Button(
                 onClick = onClick
             ) {
                 Text(
-                    text = "Back to the home"
+                    text = "Back"
                 )
             }
         }
     }
 }
-
-@Preview
-@Composable
-fun `메인_화면`() {
-    TypeSafeNavigationTheme {
-        HomeScreen(
-            onClick = {}
-        )
-    }
-}
-
-@Preview
-@Composable
-fun `상세_화면`() {
-    TypeSafeNavigationTheme {
-        DetailScreen(
-            id = "id",
-            name = "name",
-            description = "description",
-            onClick = {}
-        )
-    }
-}
-
